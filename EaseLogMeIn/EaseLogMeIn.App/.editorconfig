@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# IDE0067: Dispose objects before losing scope
+dotnet_diagnostic.IDE0067.severity = silent

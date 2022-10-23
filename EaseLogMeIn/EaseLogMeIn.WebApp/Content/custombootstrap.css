@@ -1,0 +1,84 @@
+﻿.table th, .table td {
+	padding: 0.3rem;
+	vertical-align: middle;
+}
+.table th {
+text-align:center;
+
+}
+.fa {
+    font-size: 25px !important;
+    cursor: pointer;
+}
+.fa-remove, .fa-ban{
+    color:red;
+}
+.fa-edit {
+    color: #868640;
+}
+fieldset {
+    padding: 15px 25px 15px 25px;
+    border: 1px solid #5bb85b;
+}
+
+legend {
+    border: 0;
+    width: auto;
+    color: #5bb85b;
+    margin-bottom: -20px;
+}
+
+caption{
+    caption-side:top !important;
+}
+.card-header {
+    padding: 0;
+    background-color: #17a2b8;
+}
+.card-header>button {
+    width:100%;
+}
+    .card-header :after {
+        font-family: 'Glyphicons Halflings';
+        content: "\2212";
+        float: right;
+        color: #003258;
+    }
+
+    .card-header button.collapsed:after {
+        content: "\2b";
+    }
+.card-body {
+    padding: .5rem 1.25rem;
+}
+.table th{
+    border-top:1px solid black;
+}
+@media (min-width: 768px) {
+	.login {
+		padding-left: 30%;
+		padding-right: 30%;
+	}
+}
+@media (min-width: 1440px) {
+	.container {
+		max-width: 1370px;
+	}
+}
+
+@media (min-width: 1600px) {
+	.container {
+		max-width: 1520px;
+	}
+}
+@media (min-width: 1800px) {
+	.container {
+		max-width: 1620px;
+	}
+}
+@media (min-width: 1801px) {
+	.container {
+		max-width: initial
+	}
+}
+

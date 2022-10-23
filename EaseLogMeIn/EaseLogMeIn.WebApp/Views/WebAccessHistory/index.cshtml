@@ -1,0 +1,104 @@
+﻿@model EaseLogMeIn.Models.WebHistoryModel
+@{
+	ViewBag.Title = "Desktop Application Website Access History";
+}
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+
+@if (Model != null)
+{
+	string fromdt = "";
+	string todt = "";
+	if (Model.Paging.FromDate.Year > 2000)
+	{
+		fromdt = Model.Paging.FromDate.ToString("dd MMM yyyy");
+		todt = Model.Paging.ToDate.ToString("dd MMM yyyy");
+	}
+	<form method="post">
+		@Html.AntiForgeryToken()
+		<div class="card mb-2">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+					<div class="pull-left">Search Website Access Logs</div>
+				</div>
+			</div>
+			<div id="terf45r5" class="collapse show">
+				<div class="card-body">
+					<div class="row pb-2">
+						<div class="col-md-3">
+							<label>From Date<span class="astrick">*</span></label>
+							<input type="text" name="Paging.FromDate" id="FromDate" class="form-control" placeholder="From Date" value="@fromdt" />
+						</div>
+						<div class="col-md-3">
+							<label>To Date<span class="astrick">*</span></label>
+							<input type="text" name="Paging.ToDate" id="ToDate" class="form-control" placeholder="To Date" value="@todt" />
+						</div>
+						<div class="col-md-3">
+							<label>Select User</label>
+							@Html.DropDownListFor(m => m.Paging.UserId, new SelectList(Model.Users, "UniqueId", "Name"), "Select User", new { @class = "form-control" })
+						</div>
+						<div class="col-md-3">
+							<label>Select Website</label>
+							@Html.DropDownListFor(m => m.Paging.WebsiteId, new SelectList(Model.Websites, "UniqueId", "Name"), "Select Website", new { @class = "form-control" })
+						</div>
+						<div class="col-md-3 mt-3 pt-3">
+							<input type="submit" id="Search" class="btn btn-success" formaction="/WebAccessHistory/" value="Search" />
+							<a href="/WebAccessHistory" class="btn btn-info ml-2">Reset</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@Html.Partial("_WebAccessHistory", Model)
+	</form>
+}
+else
+{
+	<div class="card mb-2">
+		<div class="toggle">
+			<div class="card-header">
+				<button type="button" id="btnS65f" class="btn btn-info text-left"> Search History </button>
+			</div>
+		</div>
+		<div class="collapse">
+			<div class="card-body">
+				<div class="row pb-2">
+					<div class="col-md-12 mt-3 pt-3">
+						Unable to process request at this.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#Search").on("click", function () {
+			let isValidSearch = true;
+			isValidSearch = IsTextEmpty($("#FromDate"));
+			if (isValidSearch) {
+				isValidSearch = IsTextEmpty($("#ToDate"));
+			}
+			else { IsTextEmpty($("#ToDate")); }
+			if (isValidSearch) {
+				$("#Search").attr("value", "Searching...");
+				$("#Paging_PageIndex").val('0');
+			}
+			return isValidSearch;
+		});
+		$("#FromDate").datepicker({
+			dateFormat: 'dd M yy',
+			defaultDate: "0",
+			maxDate: "0",
+			onSelect: function (date) {
+				$("#ToDate").datepicker("option", "minDate", date);
+			}
+		});
+		$("#ToDate").datepicker({
+			dateFormat: 'dd M yy',
+			defaultDate: "0",
+			maxDate: "0",
+		});
+	});
+</script>
+

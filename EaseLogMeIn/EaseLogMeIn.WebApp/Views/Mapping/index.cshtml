@@ -1,0 +1,112 @@
+﻿@model EaseLogMeIn.Models.MappingModel
+@{
+    ViewBag.Title = "Employee & Website Mapping";
+}
+
+<h2>Employee & Website Mapping</h2>
+@if (Model != null && Model.Websites != null && Model.Users != null)
+{
+    <form method="post" id="webForm">
+        @Html.AntiForgeryToken()
+        <div class="card  mb-2">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100 text-left">
+					<div  id="gdvgav54" > Manage Employee & Website Mapping </div>
+				</div>
+			</div>
+            <div id="ty645r5" class="collapse show">
+                <div class="card-body">
+                    @if (ViewBag.Result != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-11 offset-md-1">
+                                <label class="text-danger">
+                                    @ViewBag.Result
+                                </label>
+                            </div>
+                        </div>
+                    }
+                    <div class="row pb-2">
+                        <div class="col-md-3">
+                            <label>Map To<span class="astrick">*</span></label>
+                            <select id="MappingType" class="form-control" name="MappingType" data-req>
+                                <option value="">Select Mapping Type</option>
+                                <option value="1">User</option>
+                                <option value="2">Website</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 User54">
+                            <label>Select User<span class="astrick">*</span></label>
+                            @Html.DropDownList("UserId", new SelectList(Model.Users, "UniqueId", "Name"), "Select User", new { @class = "form-control" })
+                        </div>
+
+                        <div class="col-md-3 Website34">
+                            <label>Select Website<span class="astrick">*</span></label>
+                            @Html.DropDownList("WebsiteId", new SelectList(Model.Websites, "UniqueId", "Name"), "Select Website", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div id="Use5rr" class="Website34">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>User &nbsp;</strong>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input all" id="UckeckAll" onclick="checkAll(this)" data-id="Use5rr" />
+                                    <span class="form-check-label text-warning" for="UckeckAll">Select All</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @for (int m = 0; m < Model.Users.Count; m++)
+                                {
+                                    @Html.HiddenFor(t => t.Users[m].UniqueId)
+                                    <div class="form-check form-check-inline">
+                                        @Html.CheckBoxFor(c => c.Users[m].IsSelected, htmlAttributes: new { @class = "form-check-input chkSingle", onclick = "checkSingle(this)", dataid=Model.Users[m].UniqueId })
+                                        <span class="form-check-label" for="Projects_@(m)__IsSelected">@Model.Users[m].Name</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Webs87t" class="User54">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>Websites &nbsp;</strong>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input  all" id="WckeckAll" onclick="checkAll(this)" data-id="Webs87t" />
+                                    <span class="form-check-label text-warning" for="WckeckAll">Select All</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @for (int m = 0; m < Model.Websites.Count; m++)
+                                {
+                                    @Html.HiddenFor(t => t.Websites[m].UniqueId)
+                                    <div class="form-check form-check-inline">
+                                        @Html.CheckBoxFor(c => c.Websites[m].IsSelected, htmlAttributes: new { @class = "form-check-input chkSingle", onclick = "checkSingle(this)", dataid=Model.Websites[m].UniqueId })
+                                        <span class="form-check-label" for="Projects_@(m)__IsSelected">@Model.Websites[m].Name</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-danger" id="usrSlctError"></div>
+                    <div class="row pb-2">
+                        <div class="col-md-2 mt-3 pt-3">
+                            <input type="submit" id="submit" class="btn btn-success" formaction="/Mapping" value="Map" />
+                        </div>
+                        <div class="col-md-3 mt-3 pt-3" id="reset" style="display:none">
+                            <a href="/Website" class="btn btn-danger" title="Reset Form">Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+@Scripts.Render("~/bundles/Mapping")
+<script>
+
+</script>

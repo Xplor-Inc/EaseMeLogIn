@@ -1,0 +1,161 @@
+﻿@model EaseLogMeIn.Models.WebsiteModel
+@{
+	ViewBag.Title = "Manage Websites";
+	var web = Model.Website;
+	if (web == null) { web = new EaseLogMeIn.Models.Website(); }
+}
+<form method="post" id="webForm">
+	@Html.AntiForgeryToken()
+	<div class="card  mb-2">
+		<div class="toggle">
+			<div class="card-header">
+				<button type="button" class="btn text-left" id="gdvgav54" data-toggle="collapse" data-target="#ty645r5"> Add Website </button>
+			</div>
+		</div>
+		<div id="ty645r5" class="collapse show">
+			<div class="card-body">
+				<div class="alert-danger">
+					@Html.ValidationSummary()
+				</div>
+				@if (ViewBag.Result != null)
+				{
+					<div class="row">
+						<div class="col-md-11 offset-md-1">
+							<label class="text-danger">
+								@ViewBag.Result
+							</label>
+						</div>
+					</div>
+				}
+				@if (ViewBag.State != null)
+				{
+					<script>
+						$("#submit").attr("value", "Update");
+						$("#submit").attr("formaction", "/website/update");
+						$("#reset").show();
+					</script>
+				}
+				<div class="row pb-2">
+					<input type="hidden" name="UniqueId" value="@web.UniqueId" id="UniqueId" />
+					<div class="col-md-3">
+						<label>Website Name<span class="astrick">*</span></label>
+						<input type="text" value="@web.Name" name="Name" id="Name" class="form-control" placeholder="Air India" data-req />
+					</div>
+					<div class="col-md-3">
+						<label>Website URL<span class="astrick">*</span></label>
+						<input type="text" value="@web.URL" name="URL" id="URL" class="form-control" placeholder="https://www.abc.com" data-req />
+					</div>
+
+					<div class="col-md-3">
+						<label>User Id<span class="astrick">*</span></label>
+						<input type="text" value="@web.UserId" name="UserId" id="UserId" class="form-control" placeholder="User1" data-req />
+					</div>
+					<div class="col-md-3">
+						<label>Password<span class="astrick">*</span></label>
+						<input type="text" value="@web.Password" name="Password" id="Password" class="form-control" placeholder="Password" data-req />
+					</div>
+					<div class="col-md-3">
+						<label>Configuration Type</label>
+						<select id="ConfigurationType" name="ConfigurationType" class="form-control" data-req>
+							<option value="">Select Property</option>
+							<option value="1">By Id</option>
+							<option value="2">By Name</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<label>User Id TextId<span class="astrick">*</span></label>
+						<input type="text" value="@web.UserIdTextId" name="UserIdTextId" id="UserIdTextId" class="form-control" placeholder="UserId Textbox Id" data-req />
+					</div>
+					<div class="col-md-3">
+						<label>Password TextId<span class="astrick">*</span></label>
+						<input type="text" value="@web.PasswordTextId" name="PasswordTextId" id="PasswordTextId" class="form-control" placeholder="Password Textbox Id" data-req />
+					</div>
+					<div class="col-md-3">
+						<label>
+							Button Id<span class="astrick">*</span>
+							<span class="fa fa-question" title="put 'na' if blank"></span>
+						</label>
+						<input type="text" value="@web.ButtonId" name="ButtonId" id="ButtonId" class="form-control" placeholder="Login Button Id" data-req />
+					</div>
+					<div class="col-md-12">
+						<label>
+							Script (If Any)
+							<span class="fa fa-question showtooltip"></span>
+							<span class="hidescript showTooltipHelp alert-warning p-2">
+								Login button type and text <strong>[button,Log in - Go Air]</strong>  OR  Login button type and value <strong>[input,Submit - Air India] </strong>OR  Login button name and value <strong>[btn_Login,Login - Easemytrip]</strong>
+							</span>
+						</label>
+						<div class="col-md-3 pl-0">
+							<input type="text" value="@web.Script" name="Script" id="Script" class="form-control" placeholder="" />
+						</div>
+					</div>
+				</div>
+				@if (Model.Users != null && Model.Users.Count > 0)
+				{
+					<div id="Use5rr">
+						<hr />
+						<div class="row">
+							<div class="col-md-12">
+								<strong>Map User &nbsp;</strong>
+								<div class="form-check form-check-inline">
+									<input type="checkbox" class="form-check-input all" id="UckeckAll" onclick="checkAll(this)" data-id="Use5rr" />
+									<span class="form-check-label text-warning" for="UckeckAll">Select All</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								@for (int m = 0; m < Model.Users.Count; m++)
+								{
+									@Html.HiddenFor(t => t.Users[m].UniqueId)
+									<div class="form-check form-check-inline">
+										@Html.CheckBoxFor(c => c.Users[m].IsSelected, htmlAttributes: new { @class = "form-check-input chkSingle", onclick = "checkSingle(this)", dataid = Model.Users[m].UniqueId })
+										<span class="form-check-label" for="Projects_@(m)__IsSelected">@Model.Users[m].Name</span>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+				}
+
+			</div>
+
+			<div class="row m-2">
+				<div class="col-md-3">
+					<input type="submit" id="submit" class="btn btn-success" formaction="/Website" value="Add Website" />
+				</div>
+				<div class="col-md-3" id="reset" style="display:none">
+					<a href="/Website" class="btn btn-danger" title="Reset Form">Reset</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card mb-2">
+		<div class="toggle">
+			<div class="card-header">
+				<button type="button" id="btnS65f" class="btn btn-info text-left collapsed" data-toggle="collapse" data-target="#terf45r5"> Search Website </button>
+			</div>
+		</div>
+		<div id="terf45r5" class="collapse">
+			<div class="card-body">
+				<div class="row pb-2">
+					<div class="col-md-3">
+						<label>Website Name<span class="astrick">*</span></label>
+						<input type="text" value="@ViewBag.WebsiteName" name="WebsiteName" id="WebsiteName" class="form-control" placeholder="Air India" data-req />
+					</div>
+					<div class="col-md-2 mt-3 pt-3">
+						<input type="submit" id="Search" class="btn btn-success" formaction="/Website/Search" value="Search Website" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@if (Model != null)
+	{
+		@Html.Partial("_WebListing", Model)
+	}
+</form>
+@Scripts.Render("~/bundles/Website")
+

@@ -1,0 +1,86 @@
+﻿@model EaseLogMeIn.Models.DesktopAppLoginHistoryModel
+
+@if (Model.Logs != null)
+{
+	if (Model.Logs.Count > 0)
+	{
+		string totalrecord = "";
+		totalrecord = (Model.Paging.PageSize * Model.Paging.PageIndex + 1) + " - <span class='pct'>" +
+		   (Model.Paging.PageSize * Model.Paging.PageIndex + Model.Logs.Count) + "</span> of <span class=cnt>" + Model.Paging.Count + "</span>";
+
+		var prevDisabled = !Model.Paging.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.Paging.HasNextPage ? "disabled" : "";
+		var index = Model.Paging.PageIndex;
+		bool isPaging = (Model.Logs.Count < Model.Paging.Count);
+
+		<div class="card">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+					<div class="pull-left">Web Access Logs</div>
+					<div class="pull-right">
+						@Html.HiddenFor(m => m.Paging.PageIndex)
+						<span style="font-size: 20px;">@Html.Raw(totalrecord)</span>&nbsp;&nbsp;
+						@if (isPaging)
+						{
+							<input type="submit" id="prev" class="paging @prevDisabled" onclick="prevPage()" value="<" formaction="/DesktopAppLoginHistory" />
+							<input type="submit" id="next" class="paging @nextDisabled" onclick="nextPage()" value=">" formaction="/DesktopAppLoginHistory" />
+						}
+					</div>
+				</div>
+			</div>
+			<div class="collapse show">
+				<div class="card-body">
+					<div class="table-responsive pt-2">
+						<table class="table" border="1" id="wblist">
+							<tr>
+								<th>SR#</th>
+								<th>Employee Name</th>
+								<th>IP Address</th>
+								<th>MAC Address</th>
+								<th>Login Time</th>
+								<th>Logout Time</th>
+								<th>Time Spend</th>
+								<th>Visited Websites</th>
+							</tr>
+							@for (int i = 0; i < Model.Logs.Count; i++)
+							{
+								<tr>
+									<td>@(i + 1 + (Model.Paging.PageIndex * Model.Paging.PageSize))</td>
+									<td>@(string.Format("{0} - {1}", Model.Logs[i].Name, Model.Logs[i].UserId)) </td>
+									<td>@Model.Logs[i].IPAddress</td>
+									<td>@Model.Logs[i].MACAddress</td>
+									<td>@string.Format("{0:dd MMM yy hh:mm:ss tt}", Model.Logs[i].LoginTime)</td>
+									<td>@string.Format("{0:dd MMM yy hh:mm:ss tt}", Model.Logs[i].LogoutTime)</td>
+									<td>@Model.Logs[i].TimeSpend</td>
+									<td class="text-center">
+										@if (Model.Logs[i].VisitedWebCounts > 0)
+										{
+											<a href="/WebAccessHistory?FromDate=@Model.Logs[i].LoginTime&ToDate=@Model.Logs[i].LogoutTime&UserId=@Model.Logs[i].UniqueId" title="View Access History" class="btn btn-link p-0">@Model.Logs[i].VisitedWebCounts</a>
+										}
+										else
+										{@Model.Logs[i].VisitedWebCounts}
+									</td>
+								</tr>
+							}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	if (Model.Logs.Count == 0)
+	{
+		<div class="card">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+					<div class="pull-left">Web Access Logs</div>
+				</div>
+			</div>
+			<div class="collapse show">
+				<div class="card-body text-danger">
+					Data is not available
+				</div>
+			</div>
+		</div>
+	}
+}

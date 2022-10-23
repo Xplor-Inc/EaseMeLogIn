@@ -1,0 +1,91 @@
+﻿@model EaseLogMeIn.Models.EmployeeModel
+
+
+@if (Model != null && Model.Employees != null)
+{
+    if (Model.Employees.Count > 0)
+    {
+        string totalrecord = "";
+        totalrecord = (Model.Paging.PageSize * Model.Paging.PageIndex + 1) + " - <span class='pct'>" +
+           (Model.Paging.PageSize * Model.Paging.PageIndex + Model.Employees.Count) + "</span> of <span class=cnt>" + Model.Paging.Count + "</span>";
+
+        var prevDisabled = !Model.Paging.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Paging.HasNextPage ? "disabled" : "";
+        var index = Model.Paging.PageIndex;
+        bool isPaging = (Model.Employees.Count < Model.Paging.Count);
+
+        <div class="card">
+            <div class="toggle">
+                <div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+                    <div class="pull-left">Employees</div>
+                    <div class="pull-right">
+                        @Html.HiddenFor(m => m.Paging.PageIndex)
+                        <span style="font-size: 20px;">@Html.Raw(totalrecord)</span>&nbsp;&nbsp;
+                        @if (isPaging)
+                        {
+                            <input type="submit" id="prev" class="paging @prevDisabled" onclick="prevPage()" value="<" formaction="/Employee/search" />
+                            <input type="submit" id="next" class="paging @nextDisabled" onclick="nextPage()" value=">" formaction="/Employee/search" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="collapse show">
+                <div class="card-body">
+                    <div class="table-responsive pt-2">
+                        <table class="table" border="1" id="wblist">
+							<tr>
+								<th>SR#</th>
+								<th>Name</th>
+								<th>UserId</th>
+								<th>Is NonAD User</th>
+								<th>MAC Address</th>
+								@*<th>Mobile Number</th>*@
+								<th>Actions</th>
+							</tr>
+                            @for (int i = 0; i < Model.Employees.Count; i++)
+                            {
+                                string type = Model.Employees[i].IsNonADUser ? "Yes" : "No";
+						<tr>
+							<td>@(i + 1)</td>
+							<td>@Model.Employees[i].Name</td>
+							<td>@Model.Employees[i].UserId</td>
+							<td>@type</td>
+							<td class="text-center">@Model.Employees[i].MACId</td>
+							@*<td class="text-center">@Model.Employees[i].MobileNo</td>*@
+							<td class="text-center" data-id="@Model.Employees[i].UniqueId" data-user="@Model.Employees[i].UserId">
+								@if (Model.Employees[i].IsActive)
+								{
+									<span class="fa fa-remove" title="Delete Employee" onclick="Remove(this)">&nbsp;</span>
+									<span class="fa fa-edit" title="Update Employee" onclick="Edit(this)">&nbsp;</span>
+									<span class="fa fa-lock" title="Block Employee" onclick="Lock(this)"></span>
+								}
+								else
+								{
+									<span class="fa fa-unlock" title="UnBlock Employee" onclick="UnLock(this)"></span>
+								}
+							</td>
+						</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    if (Model.Employees.Count == 0 && ViewBag.EmployeeName != null)
+    {
+        <div class="card">
+            <div class="toggle">
+                <div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+                    <div class="pull-left">Employee</div>
+                </div>
+            </div>
+            <div class="collapse show">
+                <div class="card-body text-danger">
+                    Data is not available with keyword <strong>@ViewBag.EmployeeName</strong>
+                </div>
+            </div>
+        </div>
+
+    }
+}

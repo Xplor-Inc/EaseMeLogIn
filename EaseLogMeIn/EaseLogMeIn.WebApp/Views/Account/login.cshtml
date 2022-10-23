@@ -1,0 +1,54 @@
+﻿@model EaseLogMeIn.Models.Users
+
+@{
+	ViewBag.Title = "Login";
+	//Layout = null;
+}
+<head>
+</head>
+<div class="login">
+	<form method="post">
+		@Html.AntiForgeryToken()
+		<fieldset>
+			<legend>Login</legend>
+			@if (ViewBag.Error != null)
+			{
+				<div class="row">
+					<div class="col-md-11 offset-md-1">
+						<label class="text-danger">
+							@ViewBag.Error
+						</label>
+					</div>
+				</div>
+
+			}
+			<div class="row">
+				<div class="col-md-10 offset-md-1">
+					<label>User Id<span class="astrick">*</span></label>
+					<input type="text" name="UserId" id="UserId" class="form-control" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10 offset-md-1">
+					<label>Password<span class="astrick">*</span></label>
+					<input type="password" name="Password" id="Password" class="form-control" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10 offset-md-2 p-2">
+					<input type="submit" id="submit" class="btn btn-success" formaction="/Account/Login" value="Login" />
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+@Scripts.Render("~/bundles/Login")
+@*<script>
+
+	document.getElementsByName('identifier')[0].value ='emt.mailsys@easemytrip.com';
+	document.getElementById('identifierNext').click();
+	setTimeout(function () {
+		document.getElementsByName('password')[0].value = 'password@123';
+		document.getElementById('passwordNext').click();
+	},1000)
+</script>*@

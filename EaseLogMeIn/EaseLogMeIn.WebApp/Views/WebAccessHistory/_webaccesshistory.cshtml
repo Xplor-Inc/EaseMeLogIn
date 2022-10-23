@@ -1,0 +1,75 @@
+﻿@model EaseLogMeIn.Models.WebHistoryModel
+
+@if (Model.Logs != null)
+{
+	if (Model.Logs.Count > 0)
+	{
+		string totalrecord = "";
+		totalrecord = (Model.Paging.PageSize * Model.Paging.PageIndex + 1) + " - <span class='pct'>" +
+		   (Model.Paging.PageSize * Model.Paging.PageIndex + Model.Logs.Count) + "</span> of <span class=cnt>" + Model.Paging.Count + "</span>";
+
+		var prevDisabled = !Model.Paging.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.Paging.HasNextPage ? "disabled" : "";
+		var index = Model.Paging.PageIndex;
+		bool isPaging = (Model.Logs.Count < Model.Paging.Count);
+
+		<div class="card">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+					<div class="pull-left">Web Access Logs</div>
+					<div class="pull-right">
+						@Html.HiddenFor(m => m.Paging.PageIndex)
+						<span style="font-size: 20px;">@Html.Raw(totalrecord)</span>&nbsp;&nbsp;
+						@if (isPaging)
+						{
+							<input type="submit" id="prev" class="paging @prevDisabled" onclick="prevPage()" value="<" formaction="/WebAccessHistory" />
+							<input type="submit" id="next" class="paging @nextDisabled" onclick="nextPage()" value=">" formaction="/WebAccessHistory" />
+						}
+					</div>
+				</div>
+			</div>
+			<div class="collapse show">
+				<div class="card-body">
+					<div class="table-responsive pt-2">
+						<table class="table" border="1" id="wblist">
+							<tr>
+								<th>SR#</th>
+								<th>Emp Name</th>
+								<th>Website Name</th>
+								<th>Website User</th>
+								<th>Access Time</th>
+								<th>IP Address</th>
+							</tr>
+							@for (int i = 0; i < Model.Logs.Count; i++)
+							{
+						<tr>
+							<td>@(i + 1+ (Model.Paging.PageIndex*Model.Paging.PageSize))</td>
+							<td>@Model.Logs[i].Name</td>
+							<td>@Model.Logs[i].WebName</td>
+							<td>@Model.Logs[i].WebUser</td>
+							<td>@string.Format("{0:dd MMM yy hh:mm:ss tt}", Model.Logs[i].AccessTime)</td>
+							<td>@Model.Logs[i].IPAddress</td>
+						</tr>
+							}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	if (Model.Logs.Count == 0)
+	{
+		<div class="card">
+			<div class="toggle">
+				<div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+					<div class="pull-left">Web Access Logs</div>
+				</div>
+			</div>
+			<div class="collapse show">
+				<div class="card-body text-danger">
+					Data is not available
+				</div>
+			</div>
+		</div>
+	}
+}

@@ -1,0 +1,101 @@
+﻿@model EaseLogMeIn.Models.WebsiteModel
+
+
+@if (Model != null && Model.Websites != null)
+{
+    if (Model.Websites.Count > 0)
+    {
+        string totalrecord = "";
+        totalrecord = (Model.Paging.PageSize * Model.Paging.PageIndex + 1) + " - <span class='pct'>" +
+           (Model.Paging.PageSize * Model.Paging.PageIndex + Model.Websites.Count) + "</span> of <span class=cnt>" + Model.Paging.Count + "</span>";
+
+        var prevDisabled = !Model.Paging.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Paging.HasNextPage ? "disabled" : "";
+        var index = Model.Paging.PageIndex;
+        bool isPaging = (Model.Websites.Count < Model.Paging.Count);
+
+        <div class="card">
+            <div class="toggle">
+                <div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+                    <div class="pull-left">Websites</div>
+                    <div class="pull-right">
+                        @Html.HiddenFor(m => m.Paging.PageIndex)
+                        <span style="font-size: 20px;">@Html.Raw(totalrecord)</span>&nbsp;&nbsp;
+                        @if (isPaging)
+                        {
+                            <input type="submit" id="prev" class="paging @prevDisabled" onclick="prevPage()" value="<" formaction="/website/search" />
+                            <input type="submit" id="next" class="paging @nextDisabled" onclick="nextPage()" value=">" formaction="/website/search" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="collapse show">
+                <div class="card-body">
+                    <div class="table-responsive pt-2">
+                        <table class="table" border="1" id="wblist">
+							<tr>
+								<th>SR#</th>
+								<th>Website Name</th>
+								<th>Website URL</th>
+								<th>UserId</th>
+								<th>Password</th>
+								<th>Config Type</th>
+								<th class="d-none">UserIdTextId</th>
+								<th class="d-none">PasswordTextId</th>
+								<th>Actions</th>
+							</tr>
+                            @for (int i = 0; i < Model.Websites.Count; i++)
+                            {
+						<tr>
+							<td>@(i + 1)</td>
+							<td>@Model.Websites[i].Name</td>
+							<td style="max-width:50rem"><a href="@Model.Websites[i].URL" target="_blank">@Model.Websites[i].URL</a></td>
+							<td>@Model.Websites[i].UserId</td>
+							<td class="text-center">
+								<span class="fa fa-eye" data-pass="@Model.Websites[i].Password"></span>
+								<span></span>
+							</td>
+							<td>@Model.Websites[i].ConfigurationType</td>
+							<td class="d-none">@Model.Websites[i].UserIdTextId</td>
+							<td class="d-none">@Model.Websites[i].PasswordTextId</td>
+							<td class="d-none">@Model.Websites[i].ButtonId</td>
+							<td class="d-none">@Model.Websites[i].Script</td>
+							<td class="actionColumn-Web" data-id="@Model.Websites[i].UniqueId" data-user="@Model.Websites[i].UserId">
+								@if (Model.Websites[i].IsBlocked)
+								{
+								<span class="fa fa-remove" title="Delete Website" onclick="Remove(this)">&nbsp;</span>
+									<span class="fa fa-edit" title="Update website" onclick="Edit(this)">&nbsp;</span>
+									<span class="fa fa-unlock" title="UnBlock Website" onclick="UnLock(this)"></span>
+								}
+								else
+								{
+									<span class="fa fa-remove" title="Delete Website" onclick="Remove(this)">&nbsp;</span>
+									<span class="fa fa-edit" title="Update website" onclick="Edit(this)">&nbsp;</span>
+									<span class="fa fa-lock" title="Block Website" onclick="Lock(this)"></span>
+								}
+							</td>
+						</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    if (Model.Websites.Count == 0 && ViewBag.WebsiteName != null)
+    {
+        <div class="card">
+            <div class="toggle">
+                <div style="background-color: #17a2b8;border-bottom: 1px solid rgba(0, 0, 0, 0.125);" class="btn btn-info w-100">
+                    <div class="pull-left">Website</div>
+                </div>
+            </div>
+            <div class="collapse show">
+                <div class="card-body text-danger">
+                    Data is not available with keyword <strong>@ViewBag.WebsiteName</strong>
+                </div>
+            </div>
+        </div>
+
+    }
+}

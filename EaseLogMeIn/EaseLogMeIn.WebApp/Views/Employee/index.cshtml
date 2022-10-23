@@ -1,0 +1,132 @@
+﻿@model EaseLogMeIn.Models.EmployeeModel
+@{
+	ViewBag.Title = "Manage Employee";
+	var emp = Model.Employee;
+	if (emp == null) { emp = new EaseLogMeIn.Models.Employee(); }
+}
+
+<form method="post" id="webForm">
+	@Html.AntiForgeryToken()
+	<div class="card  mb-2">
+		<div class="toggle">
+			<div class="card-header">
+				<button type="button" class="btn btn-info text-left" id="gdvgav54" data-toggle="collapse" data-target="#ty645r5"> Add Employee </button>
+			</div>
+		</div>
+		<div id="ty645r5" class="collapse show">
+			<div class="card-body">
+				<div class="alert-danger">
+					@Html.ValidationSummary()
+				</div>
+				@if (ViewBag.Result != null)
+				{
+					<div class="row">
+						<div class="col-md-11 offset-md-1">
+							<label class="text-danger">
+								@ViewBag.Result
+							</label>
+						</div>
+					</div>
+				}
+
+				<div class="row">
+					<input type="hidden" name="UniqueId" value="@emp.UniqueId" id="UniqueId" />
+					<div class="col-md-2 ttx56r4">
+						<label>Employee Name<span class="astrick">*</span></label>
+						<input type="text" value="@emp.Name" name="Name" id="Name" class="form-control" placeholder="Employee Name" data-req />
+					</div>
+					<div class="col-md-2 ttx56r4">
+						<label>User Id<span class="astrick">*</span></label>
+						<input type="text" value="@emp.UserId" name="UserId" id="UserId" class="form-control" placeholder="Employee User Id" data-req />
+					</div>
+					<div class="col-md-2">
+						<label>Is NonAD User</label>
+						<div class="">
+							&nbsp; &nbsp;&nbsp; &nbsp;  @Html.CheckBox("IsNonADUser", htmlAttributes: new { id = "IsNonADUser", @class = "form-check-input", onclick = "NonADUser()" })
+							<span class="form-check-label" for="IsNonADUser">No</span>
+						</div>
+					</div>
+					<div class="col-md-2 dvadUser" style="display:none">
+						<label>MAC Address</label>
+						<input type="text" value="@emp.MACId" name="MACId" id="MACId" class="form-control" placeholder="MAC Address" />
+					</div>
+					@*<div class="col-md-2 dvadUser" style="display:none">
+						<label>Mobile Number</label>
+						<input type="text" value="@emp.MobileNo" name="MobileNo" id="MobileNo" class="form-control" placeholder="Mobile Number" />
+					</div>*@
+				</div>
+				@if (Model.Websites != null && Model.Websites.Count > 0)
+				{
+					<div id="Webs87t">
+						<hr />
+						<div class="row">
+							<div class="col-md-12">
+								<strong>Map Websites &nbsp;</strong>
+								<div class="form-check form-check-inline">
+									<input type="checkbox" class="form-check-input  all" id="WckeckAll" onclick="checkAll(this)" data-id="Webs87t" />
+									<span class="form-check-label text-warning" for="WckeckAll">Select All</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								@for (int m = 0; m < Model.Websites.Count; m++)
+								{
+									@Html.HiddenFor(t => t.Websites[m].UniqueId)
+									<div class="form-check form-check-inline">
+										@Html.CheckBoxFor(c => c.Websites[m].IsSelected, htmlAttributes: new { @class = "form-check-input chkSingle", onclick = "checkSingle(this)", dataid = Model.Websites[m].UniqueId })
+										<span class="form-check-label" for="Projects_@(m)__IsSelected">@Model.Websites[m].Name</span>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+				}
+				<div class="row pb-2">
+					<div class="col-md-2 pt-3">
+						<input type="submit" id="submit" class="btn btn-success" formaction="/Employee" value="Add Employee" />
+					</div>
+					<div class="col-md-3  pt-3" id="reset" style="display:none">
+						<a href="/Employee" class="btn btn-danger" title="Reset Form">Reset</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card mb-2">
+		<div class="toggle">
+			<div class="card-header">
+				<button type="button" id="btnS65f" class="btn btn-info text-left collapsed" data-toggle="collapse" data-target="#terf45r5"> Search Employee </button>
+			</div>
+		</div>
+		<div id="terf45r5" class="collapse">
+			<div class="card-body">
+				<div class="row pb-2">
+					<div class="col-md-3">
+						<label>Employee Name<span class="astrick">*</span></label>
+						<input type="text" value="@ViewBag.EmployeeName" name="EmployeeName" id="EmployeeName" class="form-control" placeholder="Employee Name" data-req />
+					</div>
+					<div class="col-md-2 mt-3 pt-3">
+						<input type="submit" id="Search" class="btn btn-success" formaction="/Employee/Search" value="Search Employee" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@if (Model != null)
+	{
+		@Html.Partial("_EmployeeListing", Model)
+	}
+	@if (ViewBag.State != null)
+	{
+		<script>
+			$("#submit").attr("value", "Update");
+			$("#submit").attr("formaction", "/Employee/update");
+			$("#reset").show();
+		</script>
+	}
+</form>
+@Scripts.Render("~/bundles/Employee")
+
